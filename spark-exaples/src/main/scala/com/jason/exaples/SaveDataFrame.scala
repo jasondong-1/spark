@@ -38,10 +38,34 @@ object SaveDataFrame {
     spark.createDataFrame(spark.sparkContext.emptyRDD[Row], StructType.fromDDL("age String,name String"))
   }
 
-  def main(args: Array[String]): Unit = {
-    save2Mysql(df)
-    spark.stop()
 
+  def save2csv(): Unit = {
+    df.write.csv("aa")
   }
 
+
+  def main(args: Array[String]): Unit = {
+    //save2Mysql(df)
+    /*save2csv()
+    spark.stop()*/
+    SSx.ff()
+    SSx.ff()
+    SSx.ff()
+  }
+
+}
+
+class SSx() {
+
+  import SSx._
+  val a = s
+}
+
+object SSx {
+  val s: String = {
+    println("hello")
+    "hello"
+  }
+
+  def ff(){}
 }
