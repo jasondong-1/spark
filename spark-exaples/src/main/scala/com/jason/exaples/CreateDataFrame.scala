@@ -1,7 +1,9 @@
 package com.jason.exaples
 
-import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.sql.SparkSession
+import java.io.{BufferedReader, FileInputStream, InputStreamReader}
+
+import org.apache.spark.{SparkConf, SparkContext, SparkFiles}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 case class Person1(name: String, age: Int)
 
@@ -64,13 +66,30 @@ object CreateDataFrame {
     println(schema1.sql)
   }
 
+  def create(): DataFrame = {
+    {
+      import scala.io.Source
+      val reader = Source.fromFile("arch.zip/arch/aa/aa.txt").getLines()
+      while(reader.hasNext){
+        println(reader.next())
+      }
+      import org.apache.spark.{SparkConf, SparkContext, SparkFiles}
+      SparkFiles.get("arch")
+      import spark.implicits._
+      val df = (0 to 100).map {
+        i => ("jason", "vf", i)
+      }.toDF("col1", "col2", "col3")
+      df
+    }
+  }
 
   def main(args: Array[String]): Unit = {
-    mysqlDF()
+    //mysqlDF()
     //csvDF()
     //textDF()
     //println(List("cc.aa","bb.aa","aa.bb").sorted)
     //testEqSchema()
+    create().show()
   }
 
 }
