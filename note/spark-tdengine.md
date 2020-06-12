@@ -32,11 +32,11 @@
 
 
 
-因公司业务需要，最近需要用到spark+TDengine,下面简单记录一下使用的过程。  
+## spark+TDengine使用  
 
-## 1.tdengine的安装  
+### 1.tdengine的安装  
 请参考官方[文档](https://www.taosdata.com/cn/documentation/)  
-## 2.在tdengine中建立测试库和测试表  
+### 2.在tdengine中建立测试库和测试表  
 ```bash
 taos> create database test;
 taos>use test;
@@ -48,7 +48,7 @@ taos> create table log_cp(
    ->  ipaddr BINARY(15)
    -> )
 ```
-## 3.spark 读取tdengine  
+### 3.spark 读取tdengine  
 因为tdengine并未提供供spark调用的DataSource,而且tdengine本身也支持jdbc，所以这里使用了spark-jdbc  
 来读取tdengine，最新的jdbc可以到[官网](https://www.taosdata.com/cn/documentation/connector/#Java-Connector)下载,我这里用的是如下版本：  
 ```xml
@@ -78,7 +78,7 @@ spark的读取代码如下：
       .load()
 ```
 
-## 4.spark 存tdengine  
+### 4.spark 存tdengine  
 因为在读tdengine的时候，第一个字段ts会被转换为decimal，但是存储时直接存decimal tdengine是不认的，  
 所以需要将ts进行类型转换  
 ```scala
@@ -92,7 +92,7 @@ jdbccdf.select(($"ts" / 1000000).cast(TimestampType).as("ts"), $"level", $"conte
       .mode(SaveMode.Append)
       .save()
 ```
-## 5.spark yarn 模式运行tdengine
+### 5.spark yarn 模式运行tdengine
 上面的测试都是基于maser 为local测试的，如果以yarn模式运行，则在每个节点上都安装tdengineclient那是不现实的，  
 查看taos-jdbcdriver的代码，发现，driver会执行System.load("taos"),也就是说只要java.library.path 中存在  
 libtaos.so，程序就可正常运行，不必安装tdengine的客户端，因为java.library.path是在jvm启动时候就设置好的，要  
@@ -139,7 +139,7 @@ spark.sparkContext.addFile("/path/to/libtaos.so")
 ```
 在yarn 模式下一定要给url设置 charset 和 locale ，如charset=UTF-8&locale=en_US.UTF-8，否则container可能会异常退出  
 
-## 6.libtaos.so 其他加载方式  
+### 6.libtaos.so 其他加载方式  
 本来还尝试了jna加载libtaos.so的方式，此方式只需将libtaos.so 放入项目resources 中，程序变回自动搜索到so文件，奈何  
 不会改tdengine中c的代码  
 
