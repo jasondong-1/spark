@@ -3,10 +3,7 @@ package com.jason.exaples
 import org.apache.spark.sql.SparkSession
 
 object UDFTest {
-
-//import com.jason.exaples.UDFTest
-  def main(args: Array[String]): Unit = {
-    Class.forName(args(0))
+  def test1: Unit = {
     val s =
       s"""
          |add jar /home/meepo/udf/udf.jar;
@@ -47,6 +44,40 @@ object UDFTest {
     spark.stop()
   }
 
+
+  //测试非hive能否使用udf
+  def test2: Unit = {
+    val spark = SparkSession.builder()
+      .master("local")
+      .appName("test2")
+      .getOrCreate()
+    import spark.implicits._
+    val df = Seq("a",
+      "b",
+      "c"
+    ).toDF("name")
+    df.createOrReplaceTempView("df")
+    val s =
+      s"""
+         |add jar /home/jason/aa/udf.jar;
+         |add jar /home/jason/aa/http-util.jar;
+         |CREATE TEMPORARY FUNCTION dp AS 'com.jason.GetDomain';
+         |CREATE TEMPORARY FUNCTION base64 AS 'com.jason.Base64x';
+         |select dp('www.baidu.com') from df limit 10
+       """.stripMargin
+    spark.sql("add jar /home/jason/aa/udf.jar")
+    spark.sql("add jar /home/jason/aa/http-util.jar")
+    spark.sql("CREATE TEMPORARY FUNCTION dp AS 'com.jason.GetDomain'")
+    spark.sql("CREATE TEMPORARY FUNCTION base64 AS 'com.jason.Base64x'")
+    spark.sql("select dp('www.baidu.com') from df limit 10").show()
+
+
+    spark.stop()
+  }
+
+
+  def main(args: Array[String]): Unit = {
+    test2
+  }
+
 }
-
-

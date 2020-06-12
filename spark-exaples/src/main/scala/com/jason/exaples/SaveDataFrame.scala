@@ -26,11 +26,11 @@ object SaveDataFrame {
     df.write
       .format("jdbc")
       .mode(SaveMode.Append)
-      .option("url", "jdbc:mysql://localhost:3306/jason?useUnicode=true&characterEncoding=utf-8")
+      .option("url", "jdbc:mysql://localhost:3306/databus?useUnicode=true&characterEncoding=utf-8")
       .option("driver", "com.mysql.jdbc.Driver")
-      .option("dbtable", "jason.test")
+      .option("dbtable", "databus.test")
       .option("user", "root")
-      .option("password", "123456")
+      .option("password", "879892206")
       .save()
   }
 
@@ -46,11 +46,11 @@ object SaveDataFrame {
 
   def main(args: Array[String]): Unit = {
     //save2Mysql(df)
-    /*save2csv()
-    spark.stop()*/
+    save2csv()
+    spark.stop()
+    /*SSx.ff()
     SSx.ff()
-    SSx.ff()
-    SSx.ff()
+    SSx.ff()*/
   }
 
 }

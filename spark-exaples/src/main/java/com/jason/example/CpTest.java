@@ -1,11 +1,13 @@
 package com.jason.example;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
 public class CpTest {
     public void ff() throws IOException {
         File f = new File(this.getClass().getResource("/").getPath());
+
         System.out.println(f);
 
         // 获取当前类的所在工程路径; 如果不加“/”  获取当前类的加载目录  D:\git\daotie\daotie\target\classes\my
