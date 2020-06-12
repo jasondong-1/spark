@@ -28,7 +28,7 @@
 
 该平台通过web界面来对组件进行配置，基本摆脱了代码的编写，不会写代码的工作人员也可进行开发
 
-![avatar](http://baidu.com/pic/doge.png)
+![avatar](https://github.com/jasondong-1/spark/blob/master/note/jgt.png)
 
 
 
